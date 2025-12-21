@@ -2,60 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Flicker – Earn by Watching & Tasks</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Flicker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-    }
-    .card {
-      background: #020617;
-      padding: 2rem;
-      border-radius: 12px;
-      max-width: 420px;
-      text-align: center;
-      box-shadow: 0 10px 40px rgba(0,0,0,.5);
-    }
-    h1 { color: #38bdf8; }
-    p { opacity: .9; }
-    input {
-      width: 100%;
-      padding: 12px;
-      margin-top: 12px;
-      border-radius: 8px;
-      border: none;
-    }
-    button {
-      margin-top: 12px;
-      padding: 12px;
-      width: 100%;
-      background: #38bdf8;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+    body { font-family: Arial, sans-serif; background:#f5f5f5; padding:30px; }
+    .card { background:white; padding:20px; max-width:400px; margin:auto; border-radius:8px; }
+    button { width:100%; padding:10px; margin-top:10px; cursor:pointer; }
+    .coins { font-size:18px; margin:10px 0; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>Flicker</h1>
-    <p>Earn money by watching videos, completing microtasks and surveys.</p>
-    <p>Coins → Cash → Withdraw.</p>
 
-    <input type="email" placeholder="Enter your email" />
-    <button>Notify me</button>
+<div class="card">
+  <h2>🔥 Flicker</h2>
+  <p>Earn coins by completing simple tasks.</p>
 
-    <p style="font-size:12px;margin-top:10px;">
-      Launching soon. First users get bonus coins 🚀
-    </p>
+  <div class="coins">
+    Coins: <span id="coins">0</span>
   </div>
+
+  <button onclick="watchAd()">▶ Watch video (+5)</button>
+  <button onclick="doTask()">📝 Complete task (+10)</button>
+  <button onclick="withdraw()">💸 Withdraw</button>
+</div>
+
+<script>
+  let coins = 0;
+
+  function updateCoins() {
+    document.getElementById("coins").innerText = coins;
+  }
+
+  function watchAd() {
+    coins += 5;
+    updateCoins();
+    alert("Video watched. +5 coins");
+  }
+
+  function doTask() {
+    coins += 10;
+    updateCoins();
+    alert("Task completed. +10 coins");
+  }
+
+  function withdraw() {
+    if (coins < 100) {
+      alert("Minimum withdrawal is 100 coins");
+      return;
+    }
+    coins = 0;
+    updateCoins();
+    alert("Withdrawal requested (demo)");
+  }
+</script>
+
 </body>
 </html>
