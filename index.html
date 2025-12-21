@@ -33,6 +33,19 @@
   <button onclick="doTask()">📝 Do task (+10)</button>
 
   <script>
+    async function saveCoins() {
+  console.log("Saving coins:", coins);
+
+  const { error } = await supabase
+    .from("profiles")
+    .update({ coins })
+    .eq("id", userId);
+
+  if (error) {
+    console.error("Save error:", error);
+  }
+}
+
     // 🔑 VYPLŇ SUPABASE ÚDAJE
     const SUPABASE_URL = "https://tyuqgebzcryrvnactnci.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5dXFnZWJ6Y3J5cnZuYWN0bmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNTA2MDAsImV4cCI6MjA4MTgyNjYwMH0.NCbS3TBU2351T-kqSi8wkYy7aBL3hVr3y8tkVVji6lI";
@@ -112,3 +125,4 @@
 
 </body>
 </html>
+
