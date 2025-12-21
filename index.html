@@ -1,60 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
   <meta charset="UTF-8" />
   <title>Flicker</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Supabase SDK -->
+  <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+
   <style>
-    body { font-family: Arial, sans-serif; background:#f5f5f5; padding:30px; }
-    .card { background:white; padding:20px; max-width:400px; margin:auto; border-radius:8px; }
-    button { width:100%; padding:10px; margin-top:10px; cursor:pointer; }
-    .coins { font-size:18px; margin:10px 0; }
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    button {
+      padding: 12px 20px;
+      margin: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
 
-<div class="card">
-  <h2>🔥 Flicker</h2>
-  <p>Earn coins by completing simple tasks.</p>
+  <h1>Flicker 💸</h1>
+  <p>Coins: <strong id="coins">0</strong></p>
 
-  <div class="coins">
-    Coins: <span id="coins">0</span>
-  </div>
+  <button onclick="watchAd()">🎥 Watch video (+5)</button>
+  <button onclick="doTask()">📝 Do task (+10)</button>
 
-  <button onclick="watchAd()">▶ Watch video (+5)</button>
-  <button onclick="doTask()">📝 Complete task (+10)</button>
-  <button onclick="withdraw()">💸 Withdraw</button>
-</div>
+  <script>
+    // 🔑 VYPLŇ SUPABASE ÚDAJE
+    const SUPABASE_URL = "https://tyuqgebzcryrvnactnci.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5dXFnZWJ6Y3J5cnZuYWN0bmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNTA2MDAsImV4cCI6MjA4MTgyNjYwMH0.NCbS3TBU2351T-kqSi8wkYy7aBL3hVr3y8tkVVji6lI";
 
-<script>
-  let coins = 0;
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-  function updateCoins() {
-    document.getElementById("coins").innerText = coins;
-  }
+    let userId = null;
+    let coins = 0;
 
-  function watchAd() {
-    coins += 5;
-    updateCoins();
-    alert("Video watched. +5 coins");
-  }
+    // 🔐 Anonymní login
+    async function initUser() {
+      const { data, error } = await supabase.auth.signInAnonymously();
 
-  function doTask() {
-    coins += 10;
-    updateCoins();
-    alert("Task completed. +10 coins");
-  }
+      if (error) {
+        alert("Auth error");
+        console.error(error);
+        return;
+      }
 
-  function withdraw() {
-    if (coins < 100) {
-      alert("Minimum withdrawal is 100 coins");
-      return;
+      userId = data.user.id;
+      loadCoins();
     }
-    coins = 0;
-    updateCoins();
-    alert("Withdrawal requested (demo)");
-  }
-</script>
+
+    // 📥 Načtení coins
+    async function loadCoins() {
+      const { data } = await supabase
+        .from("profiles")
+        .select("coins")
+        .eq("id", userId)
+        .single();
+
+      if (!data) {
+        await supabase.from("profiles").insert({
+          id: userId,
+          coins: 0
+        });
+        coins = 0;
+      } else {
+        coins = data.coins;
+      }
+
+      updateCoins();
+    }
+
+    // 💾 Uložení coins
+    async function saveCoins() {
+      await supabase
+        .from("profiles")
+        .update({ coins })
+        .eq("id", userId);
+    }
+
+    // 🎥 Fake video
+    async function watchAd() {
+      coins += 5;
+      await saveCoins();
+      updateCoins();
+    }
+
+    // 📝 Fake task
+    async function doTask() {
+      coins += 10;
+      await saveCoins();
+      updateCoins();
+    }
+
+    // 🔄 UI update
+    function updateCoins() {
+      document.getElementById("coins").innerText = coins;
+    }
+
+    initUser();
+  </script>
 
 </body>
 </html>
