@@ -1,11 +1,61 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Funguje to</title>
+  <meta charset="UTF-8" />
+  <title>Flicker – Earn by Watching & Tasks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      background: #020617;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 420px;
+      text-align: center;
+      box-shadow: 0 10px 40px rgba(0,0,0,.5);
+    }
+    h1 { color: #38bdf8; }
+    p { opacity: .9; }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-top: 12px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      margin-top: 12px;
+      padding: 12px;
+      width: 100%;
+      background: #38bdf8;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Vercel funguje 🎉</h1>
-  <p>Pokud tohle vidíš, máš vyhráno.</p>
+  <div class="card">
+    <h1>Flicker</h1>
+    <p>Earn money by watching videos, completing microtasks and surveys.</p>
+    <p>Coins → Cash → Withdraw.</p>
+
+    <input type="email" placeholder="Enter your email" />
+    <button>Notify me</button>
+
+    <p style="font-size:12px;margin-top:10px;">
+      Launching soon. First users get bonus coins 🚀
+    </p>
+  </div>
 </body>
 </html>
