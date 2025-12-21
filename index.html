@@ -45,8 +45,6 @@
     console.error("Save error:", error);
   }
 }
-
-    // 🔑 VYPLŇ SUPABASE ÚDAJE
     const SUPABASE_URL = "https://tyuqgebzcryrvnactnci.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5dXFnZWJ6Y3J5cnZuYWN0bmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNTA2MDAsImV4cCI6MjA4MTgyNjYwMH0.NCbS3TBU2351T-kqSi8wkYy7aBL3hVr3y8tkVVji6lI";
 
@@ -72,7 +70,6 @@
       loadCoins();
     }
 
-    // 📥 Načtení coins
     async function loadCoins() {
       const { data } = await supabase
         .from("profiles")
@@ -93,7 +90,6 @@
       updateCoins();
     }
 
-    // 💾 Uložení coins
     async function saveCoins() {
       await supabase
         .from("profiles")
@@ -101,21 +97,18 @@
         .eq("id", userId);
     }
 
-    // 🎥 Fake video
     async function watchAd() {
       coins += 5;
       await saveCoins();
       updateCoins();
     }
 
-    // 📝 Fake task
     async function doTask() {
       coins += 10;
       await saveCoins();
       updateCoins();
     }
 
-    // 🔄 UI update
     function updateCoins() {
       document.getElementById("coins").innerText = coins;
     }
@@ -125,4 +118,5 @@
 
 </body>
 </html>
+
 
