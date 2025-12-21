@@ -32,77 +32,83 @@
   <button onclick="watchAd()">🎥 Watch video (+5)</button>
   <button onclick="doTask()">📝 Do task (+10)</button>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // 🔑 VYPLŇ SUPABASE ÚDAJE
+    const SUPABASE_URL = "https://tyuqgebzcryrvnactnci.supabase.co";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5dXFnZWJ6Y3J5cnZuYWN0bmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNTA2MDAsImV4cCI6MjA4MTgyNjYwMH0.NCbS3TBU2351T-kqSi8wkYy7aBL3hVr3y8tkVVji6lI";
 
-<script>
-const SUPABASE_URL = "https://tyuqgebzcryrvnactnci.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR5dXFnZWJ6Y3J5cnZuYWN0bmNpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjYyNTA2MDAsImV4cCI6MjA4MTgyNjYwMH0.NCbS3TBU2351T-kqSi8wkYy7aBL3hVr3y8tkVVji6lI";
+    const supabase = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_ANON_KEY
+    );
 
-const supabase = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+    let userId = null;
+    let coins = 0;
 
-let userId = null;
-let coins = 0;
+    // 🔐 Anonymní login
+    async function initUser() {
+      const { data, error } = await supabase.auth.signInAnonymously();
 
-// AUTH
-async function init() {
-  const { data } = await supabase.auth.getUser();
+      if (error) {
+        alert("Auth error");
+        console.error(error);
+        return;
+      }
 
-  if (data.user) {
-    userId = data.user.id;
-  } else {
-    const { data: anon } = await supabase.auth.signInAnonymously();
-    userId = anon.user.id;
+      userId = data.user.id;
+      loadCoins();
+    }
 
-    await supabase.from("profiles").insert({
-      id: userId,
-      coins: 0
-    });
-  }
+    // 📥 Načtení coins
+    async function loadCoins() {
+      const { data } = await supabase
+        .from("profiles")
+        .select("coins")
+        .eq("id", userId)
+        .single();
 
-  loadCoins();
-}
+      if (!data) {
+        await supabase.from("profiles").insert({
+          id: userId,
+          coins: 0
+        });
+        coins = 0;
+      } else {
+        coins = data.coins;
+      }
 
-async function loadCoins() {
-  const { data } = await supabase
-    .from("profiles")
-    .select("coins")
-    .eq("id", userId)
-    .single();
+      updateCoins();
+    }
 
-  coins = data?.coins || 0;
-  document.getElementById("coins").innerText = coins;
-}
+    // 💾 Uložení coins
+    async function saveCoins() {
+      await supabase
+        .from("profiles")
+        .update({ coins })
+        .eq("id", userId);
+    }
 
-// ✅ JEDINÁ FUNKCE NA COINY
-async function addCoins(amount) {
-  coins += amount;
-  document.getElementById("coins").innerText = coins;
+    // 🎥 Fake video
+    async function watchAd() {
+      coins += 5;
+      await saveCoins();
+      updateCoins();
+    }
 
-  const { error } = await supabase
-    .from("profiles")
-    .update({ coins })
-    .eq("id", userId);
+    // 📝 Fake task
+    async function doTask() {
+      coins += 10;
+      await saveCoins();
+      updateCoins();
+    }
 
-  if (error) {
-    console.error("SAVE ERROR:", error);
-  }
-}
+    // 🔄 UI update
+    function updateCoins() {
+      document.getElementById("coins").innerText = coins;
+    }
 
-// BUTTON ACTIONS
-function watchAd() {
-  addCoins(5);
-}
-
-function doTask() {
-  addCoins(10);
-}
-
-init();
-</script>
+    initUser();
+  </script>
 
 </body>
 </html>
-
