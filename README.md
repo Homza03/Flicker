@@ -1,5 +1,7 @@
 Mini Challenge Hub
 
+[![Flutter CI](https://github.com/Homza03/Flicker/actions/workflows/flutter_ci.yml/badge.svg)](https://github.com/Homza03/Flicker/actions/workflows/flutter_ci.yml)
+
 This repository contains a scaffold of a Flutter app for the "Mini Challenge Hub" concept.
 
 Quick start (developer):
