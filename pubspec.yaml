@@ -21,6 +21,7 @@ dependencies:
   firebase_storage: ^11.0.0
   flutter_local_notifications: ^13.0.0
   shared_preferences: ^2.1.1
+  audioplayers: ^2.1.1
 
 dev_dependencies:
   flutter_test:

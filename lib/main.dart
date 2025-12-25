@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'screens/home.dart';
+import 'screens/sign_in.dart';
+import 'screens/auth_gate.dart';
 import 'games/snake_game.dart';
 import 'games/tetris_game.dart';
 import 'games/solitaire_game.dart';
@@ -62,8 +64,10 @@ class MiniChallengeHubApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (ctx) => const HomeScreen(),
+        '/': (ctx) => const AuthGate(),
+        '/signin': (ctx) => const SignInScreen(),
         '/reflex': (ctx) => const ReflexGameScreen(),
+        '/city_dash': (ctx) => const CityDashScreen(),
         '/puzzle': (ctx) => const PlaceholderWidget(),
         '/avoid': (ctx) => const PlaceholderWidget(),
         '/score10': (ctx) => const PlaceholderWidget(),
